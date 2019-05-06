@@ -49,7 +49,7 @@ The required parameters in the request are:
 You can send either htmlbody or textbody parameters, No need to send both the parameters in the request.
 
 ## Deployment
-To deploy your application to AWS, you need to just run following single command
+To deploy your application to AWS, you need to just run single command
 
 ```ruby_on_rails
 $ jets deploy
