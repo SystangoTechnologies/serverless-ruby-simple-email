@@ -1,5 +1,5 @@
-# Serverless Rest APIs
-This is a simple serverless application build over Jets framework of ruby. The application illustrate how we can create simple serverless email service using jets framework.
+# Serverless Email Service
+This is a simple serverless application build over Jets framework of the ruby. The application illustrates how we can create a simple serverless email service using jets framework.
 ## Requirements
 * AWS CLI
 
