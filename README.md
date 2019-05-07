@@ -39,13 +39,10 @@ $ curl -X POST \
   -H 'cache-control: no-cache'
 ```
 The required parameters in the request are:
-* sender
-* recipient
-* subject
-* htmlbody
-* textbody
-
-You can send either htmlbody or textbody parameters, No need to send both the parameters in the request.
+* **sender** [string]: Email address of sender
+* **recipients** [array]: Array of recipients emails.
+* **subject** [string]: Subject of Email
+* **body** [string]: Body of subject(HTML or normal text)
 
 ## Deployment
 To deploy your application to AWS, you need to just run single command
