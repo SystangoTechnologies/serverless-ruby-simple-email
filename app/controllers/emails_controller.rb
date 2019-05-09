@@ -12,9 +12,9 @@ class EmailsController < ApplicationController
       @recipients.uniq.each do |recipient|
         resp = @ses.send_email(get_email_configuration(recipient, @sender, @body, @subject))
       end
-      render json: {success: true, message: "Email sent!", status: 200}
+      render json: {message: "Email sent!"}, status: 201
     rescue Aws::SES::Errors::ServiceError => error
-      render json: {success: false, message: error, status: 200}
+      render json: {message: error}, status: 422
     end
   end
 
@@ -24,7 +24,7 @@ class EmailsController < ApplicationController
       if params[:sender].present? 
         @sender = params[:sender]
       else
-        render json: {success: false, message: "Please pass the sender value", status: 200}
+        render json: {message: "Please pass the sender value"}, status: 400
       end
     end
 
@@ -32,7 +32,7 @@ class EmailsController < ApplicationController
       if params[:recipients].present? 
         @recipients = params[:recipients]
       else
-        render json: {success: false, message: "Please pass the recipients value", status: 200}
+        render json: {message: "Please pass the recipients value"}, status: 400
       end
     end
 
@@ -40,7 +40,7 @@ class EmailsController < ApplicationController
       if params[:subject].present? 
         @subject = params[:subject]
       else
-        render json: {success: false, message: "Please pass the subject value", status: 200}
+        render json: {message: "Please pass the subject value"}, status: 400
       end
     end
 
@@ -48,7 +48,7 @@ class EmailsController < ApplicationController
       if params[:body].present?
         @body = params[:body]
       else
-        render json: {success: false, message: "Please pass the body value", status: 200}
+        render json: {message: "Please pass the body value"}, status: 400
       end
     end
 

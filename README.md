@@ -34,9 +34,11 @@ To send email, you can hit the following endpoint as a POST request.
 
 ```ruby_on_rails
 $ curl -X POST \
-  'http://localhost:8888/send_email?sender=john@yopmail.com&recipient=david@yopmail.com&subject=this%20is%20the%20test%20subject&htmlbody=%3Ch1%3Ehi,%20David%3C/h1%3E' \
+  http://localhost:8888/send_email \
+  -H 'Authorization: {YOUR AUTHORIZATION KEY}' \
   -H 'Content-Type: application/x-www-form-urlencoded' \
   -H 'cache-control: no-cache'
+  -d '{"sender": "sender@domain.com", "recipients": ["recipient1@domain.com", "recipient2@domain.com"],"subject": "Test email", "body": "<h1>Hi User!</h1>"}'
 ```
 The required parameters in the request are:
 * **sender** [string]: Email address of sender
