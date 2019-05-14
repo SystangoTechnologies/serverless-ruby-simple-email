@@ -23,8 +23,8 @@ $ aws configure
 ### Step 4 - Take clone of the repository
 
 ```ruby_on_rails
-$ git clone https://gitlab.com/prateek-systango/serverless-email-service.git
-$ cd serverless-rest-apis
+$ git clone https://github.com/SystangoTechnologies/serverless-ruby-simple-email.git
+$ cd serverless-ruby-simple-email
 $ bundle install
 ```
 ### Step 5 - Run Application
