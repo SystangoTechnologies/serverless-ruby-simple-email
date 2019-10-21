@@ -34,7 +34,7 @@ To start your the jets server locally, you need to run
 ```ruby_on_rails
 $ jets s
 ```
-Your Service must be running on http://localhost:8888.
+It will start your service on http://localhost:8888.
 
 To send email, you can hit the following endpoint as a POST request.
 
