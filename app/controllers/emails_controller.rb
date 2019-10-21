@@ -1,59 +1,74 @@
-class EmailsController < ApplicationController
-  include ApplicationHelper
+# frozen_string_literal: true
 
-  before_action :set_sender
-  before_action :set_recipients
-  before_action :set_subject
-  before_action :set_body
+class EmailsController < ApplicationController
+  before_action :check_sender
+  before_action :check_recipients
+  before_action :check_subject
+  before_action :check_body
   before_action :initialize_ses
 
   def send_email
-    begin
-      @recipients.uniq.each do |recipient|
-        resp = @ses.send_email(get_email_configuration(recipient, @sender, @body, @subject))
-      end
-      render json: {message: "Email sent!"}, status: 201
-    rescue Aws::SES::Errors::ServiceError => error
-      render json: {message: error}, status: 422
-    end
+    @ses.send_email(email_configurations)
+    render json: { message: 'Email sent!' }, status: 201
+  rescue Aws::SES::Errors::ServiceError => e
+    render json: { message: e }, status: 422
   end
 
   private
-    
-    def set_sender
-      if params[:sender].present? 
-        @sender = params[:sender]
-      else
-        render json: {message: "Please pass the sender value"}, status: 400
-      end
-    end
 
-    def set_recipients
-      if params[:recipients].present? 
-        @recipients = params[:recipients]
-      else
-        render json: {message: "Please pass the recipients value"}, status: 400
-      end
-    end
+  def check_sender
+    return if params[:sender].present?
 
-    def set_subject
-      if params[:subject].present? 
-        @subject = params[:subject]
-      else
-        render json: {message: "Please pass the subject value"}, status: 400
-      end
-    end
+    render json: { message: 'Please pass the sender value' }, status: 400
+  end
 
-    def set_body
-      if params[:body].present?
-        @body = params[:body]
-      else
-        render json: {message: "Please pass the body value"}, status: 400
-      end
-    end
+  def check_recipients
+    return if params[:to_addresses].present?
 
+    render json: { message: 'Please pass the recipients value' }, status: 400
+  end
 
-    def initialize_ses
-      @ses = Aws::SES::Client.new()
-    end
+  def check_subject
+    return if params[:subject].present?
+
+    render json: { message: 'Please pass the subject value' }, status: 400
+  end
+
+  def check_body
+    return if params[:text_body].present? || params[:html_body].present?
+
+    render json: { message: 'Please pass the body value' }, status: 400
+  end
+
+  def initialize_ses
+    @ses = Aws::SES::Client.new(
+      region: ENV['REGION'],
+      access_key_id: ENV['ACCESS_KEY_ID'],
+      secret_access_key: ENV['SECRET_ACCESS_KEY']
+    )
+  end
+
+  def email_configurations
+    {
+      destination: {
+        to_addresses: params[:to_addresses],
+        cc_addresses: params[:cc_addresses],
+        bcc_addresses: params[:bcc_addresses]
+      },
+      message: {
+        body: {
+          html: {
+            data: params[:html_body] || ''
+          },
+          text: {
+            data: params[:text_body] || ''
+          }
+        },
+        subject: {
+          data: params[:subject]
+        }
+      },
+      source: params[:sender]
+    }
+  end
 end
