@@ -2,19 +2,19 @@
 
 source 'https://rubygems.org'
 
-gem 'aws-sdk'
+gem 'aws-ses'
 gem 'dynomite'
 gem 'jets'
 # Include mysql2 gem if you are using ActiveRecord, remove if you are not
 gem 'mysql2', '~> 0.5.2'
+
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'pry'
   gem 'rack'
   gem 'rubocop', require: false
   gem 'rubocop-performance'
   gem 'shotgun'
-  gem 'pry'
 end
 
 group :test do

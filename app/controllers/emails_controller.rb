@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class EmailsController < ApplicationController
-  before_action :check_sender
+  before_action :check_from
   before_action :check_recipients
   before_action :check_subject
   before_action :check_body
@@ -16,14 +16,14 @@ class EmailsController < ApplicationController
 
   private
 
-  def check_sender
-    return if params[:sender].present?
+  def check_from
+    return if params[:from].present?
 
-    render json: { message: 'Please pass the sender value' }, status: 400
+    render json: { message: 'Please pass the from value' }, status: 400
   end
 
   def check_recipients
-    return if params[:to_addresses].present?
+    return if params[:to].present?
 
     render json: { message: 'Please pass the recipients value' }, status: 400
   end
@@ -35,40 +35,26 @@ class EmailsController < ApplicationController
   end
 
   def check_body
-    return if params[:text_body].present? || params[:html_body].present?
+    return if params[:textBody].present? || params[:htmlBody].present?
 
     render json: { message: 'Please pass the body value' }, status: 400
   end
 
   def initialize_ses
-    @ses = Aws::SES::Client.new(
-      region: ENV['REGION'],
-      access_key_id: ENV['ACCESS_KEY_ID'],
-      secret_access_key: ENV['SECRET_ACCESS_KEY']
-    )
+    @ses = AWS::SES::Base.new(region: ENV['REGION'],
+                              access_key_id: ENV['ACCESS_KEY_ID'],
+                              secret_access_key: ENV['SECRET_ACCESS_KEY'])
   end
 
   def email_configurations
     {
-      destination: {
-        to_addresses: params[:to_addresses],
-        cc_addresses: params[:cc_addresses],
-        bcc_addresses: params[:bcc_addresses]
-      },
-      message: {
-        body: {
-          html: {
-            data: params[:html_body] || ''
-          },
-          text: {
-            data: params[:text_body] || ''
-          }
-        },
-        subject: {
-          data: params[:subject]
-        }
-      },
-      source: params[:sender]
+      from: params[:from],
+      to: params[:to],
+      cc: params[:cc],
+      bcc: params[:bcc],
+      subject: params[:subject],
+      text_body: params[:textBody],
+      html_body: params[:htmlBody]
     }
   end
 end
