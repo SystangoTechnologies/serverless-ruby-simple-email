@@ -241,7 +241,7 @@ GEM
     text-table (1.2.4)
     thor (1.0.1)
     thread_safe (0.3.6)
-    tzinfo (1.2.6)
+    tzinfo (1.2.10)
       thread_safe (~> 0.1)
     unicode-display_width (1.6.0)
     xml-simple (1.1.5)
